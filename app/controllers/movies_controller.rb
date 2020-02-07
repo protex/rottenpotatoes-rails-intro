@@ -11,13 +11,17 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if params[:clear_session] == "true"
+      reset_session
+    end
     @valid_ratings= Movie.valid_ratings
     @ratings_filter= params[:ratings_filter] || []
     if @ratings_filter.length == 0
       flash.keep
+      # Make sure we save sort change
       redirect_to movies_path(
         :ratings_filter => session[:ratings_filter] || @valid_ratings,
-        :sort => session[:sort] || "none"
+        :sort => params[:sort] || session[:sort] || "none"
       )
     end
     session[:ratings_filter]= @ratings_filter
@@ -34,6 +38,7 @@ class MoviesController < ApplicationController
       @movies = Movie.all.with_ratings(@ratings_filter)
       @sort= session[:sort] || "none"
     end
+
   end
 
   def new
