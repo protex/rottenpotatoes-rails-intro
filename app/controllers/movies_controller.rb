@@ -12,7 +12,14 @@ class MoviesController < ApplicationController
 
   def index
     @valid_ratings= Movie.valid_ratings
-    @ratings_filter= (params[:ratings_filter] || session[:ratings_filter] || @valid_ratings)
+    @ratings_filter= params[:ratings_filter] || []
+    if @ratings_filter.length == 0
+      flash.keep
+      redirect_to movies_path(
+        :ratings_filter => session[:ratings_filter] || @valid_ratings,
+        :sort => session[:sort] || "none"
+      )
+    end
     session[:ratings_filter]= @ratings_filter
 
     if params[:sort] == "title"
@@ -24,8 +31,8 @@ class MoviesController < ApplicationController
       @sort= "release_date"
       session[:sort]= "release_date"
     else
-      @movies = Movie.order('movies.title ASC').with_ratings(@ratings_filter)
-      @sort= session[:sort] || "title"
+      @movies = Movie.all.with_ratings(@ratings_filter)
+      @sort= session[:sort] || "none"
     end
   end
 
