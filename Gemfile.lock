@@ -222,6 +222,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
+  guard
   guard-rspec
   haml
   jbuilder (~> 2.0)
