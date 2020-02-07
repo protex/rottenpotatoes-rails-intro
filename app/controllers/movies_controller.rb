@@ -16,15 +16,15 @@ class MoviesController < ApplicationController
     session[:ratings_filter]= @ratings_filter
 
     if params[:sort] == "title"
-      @movies = Movie.order('movies.title DESC').with_ratings(@ratings_filter)
+      @movies = Movie.order('movies.title ASC').with_ratings(@ratings_filter)
       @sort= "title"
       session[:sort]= "title"
     elsif params[:sort] == "release_date"
-      @movies = Movie.order('movies.release_date DESC').with_ratings(@ratings_filter)
+      @movies = Movie.order('movies.release_date ASC').with_ratings(@ratings_filter)
       @sort= "release_date"
       session[:sort]= "release_date"
     else
-      @movies = Movie.order('movies.title DESC').with_ratings(@ratings_filter)
+      @movies = Movie.order('movies.title ASC').with_ratings(@ratings_filter)
       @sort= session[:sort] || "title"
     end
   end
